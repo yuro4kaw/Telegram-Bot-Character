@@ -22,8 +22,10 @@ BOT_COMMAND = os.getenv("BOT_COMMAND")
 bot = Bot(token=BOT_TOKEN, default=DefaultBotProperties(parse_mode="HTML"))
 dp = Dispatcher()
 
-@dp.message(Command(commands=BOT_COMMAND))
+@dp.message(Command(commands=BOT_COMMAND, prefix="/"))
 async def cmd_vova(m: Message, bot: Bot):
+    if not m.text.startswith(f"/{BOT_COMMAND}@{bot.me.username}"):
+        return
     char_client = await get_client(token=CHARACTER_AI_TOKEN)
 
     msg_parts = m.text.split()
