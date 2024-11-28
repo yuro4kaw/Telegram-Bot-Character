@@ -23,9 +23,13 @@ bot = Bot(token=BOT_TOKEN, default=DefaultBotProperties(parse_mode="HTML"))
 dp = Dispatcher()
 
 @dp.message(Command(commands=BOT_COMMAND, prefix="/"))
-async def cmd_vova(m: Message, bot: Bot):
-    if not m.text.startswith(f"/{BOT_COMMAND}@{bot.me.username}"):
-        return
+async def cmd_vova(m: Message):
+    bot_info = await bot.get_me()  
+    bot_username = bot_info.username
+
+    if f"@{bot_username}" not in m.text and m.chat.type != "private":
+        return 
+
     char_client = await get_client(token=CHARACTER_AI_TOKEN)
 
     msg_parts = m.text.split()
